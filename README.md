@@ -3,35 +3,33 @@
 #### 介绍
 用于多媒体项目开发
 
-#### 软件架构
-软件架构说明
+#### 配置Live Template
 
-
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+    // create CameraNeo object in OnCreate
+    CameraNeo mCameraNeo = new CameraNeo(this);
+    private void neoCamera(String id) {
+        // 1 open camera
+        mCameraNeo.openCamera(id, new NeoCallback.StateCallback() {
+            @Override
+            public void onOpened(@NonNull CameraDevice camera) {
+                super.onOpened(camera);
+                mCameraNeo.setCameraDevice(camera);
+                // 2 config session
+                List<OutputConfiguration> list = new ArrayList<>();
+                list.add(new OutputConfiguration(surfaceView.getHolder().getSurface()));
+                // 3 create session
+                mCameraNeo.createSession(SESSION_REGULAR, list, new NeoCallback.SessionStateCallback() {
+                    @Override
+                    public void onConfigured(@NonNull CameraCaptureSession session) {
+                        mCameraNeo.setCaptureSession(session);
+    
+                        // 4 create request and send request
+                        CaptureRequest.Builder builder = mCameraNeo.getBuilder(CameraDevice.TEMPLATE_RECORD);
+                        builder.addTarget(surfaceView.getHolder().getSurface());
+                        mCameraNeo.sendRequest(builder.build(), null, REPEATING_REQUEST);
+                    }
+                });
+            }
+        });
+    }
+![1635075002475](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1635075002475.png)

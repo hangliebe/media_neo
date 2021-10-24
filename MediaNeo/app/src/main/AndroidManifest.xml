@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".rtmp.RtmpActivity"></activity>
+        <activity android:name="com.hangliebe.medianeo.previewTest.PreviewActivity"></activity>
+        <activity android:name=".rtmp.RtmpActivity" />
         <activity android:name=".case1.ImageReaderDemo" />
         <activity android:name=".MainActivity">
             <intent-filter>

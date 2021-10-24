@@ -65,7 +65,7 @@ public class ImageReaderDemo extends AppCompatActivity {
                         builder = cameraNeo.getBuilder(CameraDevice.TEMPLATE_STILL_CAPTURE);
                         builder.addTarget(imageReader.getSurface());
 
-                        cameraNeo.sendRequest(builder.build(), null, CameraNeo.RequestType.CAPTURE);
+                        cameraNeo.sendRequest(builder.build(), null, CameraNeo.RequestType.REPEATING_REQUEST);
                     }
                 });
             }

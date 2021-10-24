@@ -10,14 +10,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.hangliebe.medianeocat.CameraNeo;
 import com.hangliebe.medianeo.rtmp.RtmpActivity;
+import com.hangliebe.medianeo.previewTest.PreviewActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnRtmp;
+    private Button btnPreview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RtmpActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnPreview = findViewById(R.id.btn_preview);
+        btnPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PreviewActivity.class);
                 startActivity(intent);
             }
         });

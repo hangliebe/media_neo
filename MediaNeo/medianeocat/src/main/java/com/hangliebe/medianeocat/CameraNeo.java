@@ -44,13 +44,12 @@ public class CameraNeo {
         }
 
         mCameraThread = new HandlerThread("camera_thread");
-        mCameraHandler = new Handler((mCameraThread.getLooper()));
+        mCameraThread.start();
+        mCameraHandler = new Handler(mCameraThread.getLooper());
     }
 
     public void openCamera(String id, NeoCallback.StateCallback stateCallback){
-        if (mCameraThread != null) {
-            mCameraThread.start();
-        }
+
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -70,11 +69,16 @@ public class CameraNeo {
         if (mCameraDevice == null) {
             return;
         }
-
+        Executor executor = new Executor() {
+            @Override
+            public void execute(Runnable command) {
+                command.run();
+            }
+        };
         SessionConfiguration configuration = new SessionConfiguration(
                 sessionMode,
                 outputs,
-                null,
+                executor,
                 callback
         );
         try {
@@ -139,6 +143,16 @@ public class CameraNeo {
                 break;
             default:
                 break;
+        }
+    }
+
+    public void release() {
+        if (mCaptureSession != null) {
+            mCaptureSession.close();
+        }
+        if (mCameraDevice != null) {
+            mCameraDevice.close();
+
         }
     }
 }
