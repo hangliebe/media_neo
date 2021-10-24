@@ -1,4 +1,4 @@
-package com.hangliebe.meidaneo.case1;
+package com.hangliebe.medianeo.case1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,8 +17,9 @@ import android.os.ParcelUuid;
 import android.util.Log;
 
 import com.hangliebe.medianeocat.CameraNeo;
+import com.hangliebe.medianeocat.CameraNeoException;
 import com.hangliebe.medianeocat.NeoCallback;
-import com.hangliebe.meidaneo.R;
+import com.hangliebe.medianeo.R;
 
 import net.butterflytv.rtmp_client.RTMPMuxer;
 
@@ -37,7 +38,6 @@ public class ImageReaderDemo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_reader_demo);
-
         imageReader = ImageReader.newInstance(WIDTH, HEIGHT, ImageFormat.YUV_420_888, 1);
 //        imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
 //            @Override
@@ -56,17 +56,16 @@ public class ImageReaderDemo extends AppCompatActivity {
                 cameraNeo.setCameraDevice(camera);
                 List<OutputConfiguration> outputs = new ArrayList<>();
                 outputs.add(new OutputConfiguration(imageReader.getSurface()));
-                cameraNeo.createSession(SessionConfiguration.SESSION_REGULAR,new NeoCallback.SessionStateCallback(){
+                cameraNeo.createSession(SessionConfiguration.SESSION_REGULAR, outputs, new NeoCallback.SessionStateCallback() {
                     @Override
                     public void onConfigured(@NonNull CameraCaptureSession session) {
                         cameraNeo.setCaptureSession(session);
-                        CaptureRequest.Builder builder = cameraNeo.getBuilder(CameraDevice.TEMPLATE_STILL_CAPTURE);
+                        CaptureRequest.Builder builder = null;
+
+                        builder = cameraNeo.getBuilder(CameraDevice.TEMPLATE_STILL_CAPTURE);
                         builder.addTarget(imageReader.getSurface());
-                        try {
-                            cameraNeo.sendRequest(builder.build(), null, CameraNeo.RequestType.CAPTURE);
-                        } catch (CameraAccessException e) {
-                            e.printStackTrace();
-                        }
+
+                        cameraNeo.sendRequest(builder.build(), null, CameraNeo.RequestType.CAPTURE);
                     }
                 });
             }

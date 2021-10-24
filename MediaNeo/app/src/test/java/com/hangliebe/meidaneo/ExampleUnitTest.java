@@ -1,4 +1,4 @@
-package com.hangliebe.meidaneo;
+package com.hangliebe.medianeo;
 
 import org.junit.Test;
 

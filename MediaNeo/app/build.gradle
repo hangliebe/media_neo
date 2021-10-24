@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.hangliebe.meidaneo"
+        applicationId "com.hangliebe.medianeo"
         minSdkVersion 29
         targetSdkVersion 29
         versionCode 1
@@ -30,7 +30,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
- //   implementation(name: 'medianeocat-release', ext: 'aar')
+   // implementation(name: 'medianeocat-release', ext: 'aar')
 
     implementation 'net.butterflytv.utils:rtmp-client:3.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'

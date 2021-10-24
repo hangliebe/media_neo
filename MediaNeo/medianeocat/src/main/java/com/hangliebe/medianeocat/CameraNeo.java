@@ -12,6 +12,7 @@ import android.hardware.camera2.params.OutputConfiguration;
 import android.hardware.camera2.params.SessionConfiguration;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 public class CameraNeo {
+    private static String TAG = "CameraNeo";
     private Context mContext;
     private CameraManager mCameraManager;
     private Handler mCameraHandler;
@@ -45,14 +47,18 @@ public class CameraNeo {
         mCameraHandler = new Handler((mCameraThread.getLooper()));
     }
 
-    public void openCamera(String id, NeoCallback.StateCallback stateCallback) throws CameraAccessException {
+    public void openCamera(String id, NeoCallback.StateCallback stateCallback){
         if (mCameraThread != null) {
             mCameraThread.start();
         }
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mCameraManager.openCamera(id, stateCallback, mCameraHandler);
+        try {
+            mCameraManager.openCamera(id, stateCallback, mCameraHandler);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setCameraDevice(CameraDevice camera) {
@@ -60,7 +66,7 @@ public class CameraNeo {
     }
 
     public void createSession(int sessionMode, List<OutputConfiguration> outputs,
-                               NeoCallback.SessionStateCallback callback) throws CameraAccessException {
+                               NeoCallback.SessionStateCallback callback) {
         if (mCameraDevice == null) {
             return;
         }
@@ -71,40 +77,52 @@ public class CameraNeo {
                 null,
                 callback
         );
-        mCameraDevice.createCaptureSession(configuration);
+        try {
+            mCameraDevice.createCaptureSession(configuration);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setCaptureSession(CameraCaptureSession session) {
         mCaptureSession = session;
     }
 
-    public CaptureRequest.Builder getBuilder(int templateType)
-            throws CameraAccessException, CameraNeoException {
+    public CaptureRequest.Builder getBuilder(int templateType) {
         if (mCameraDevice == null) {
-            throw new CameraNeoException("getBuilder");
+            Log.d(TAG, "mCameraDevice should not be null!");
         }
-        CaptureRequest.Builder builder = mCameraDevice.createCaptureRequest(templateType);
+        CaptureRequest.Builder builder = null;
+        try {
+            builder = mCameraDevice.createCaptureRequest(templateType);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
         return builder;
     }
 
     public void sendRequest(CaptureRequest request,
-                            CameraCaptureSession.CaptureCallback callback, RequestType type)
-            throws CameraAccessException {
+                            CameraCaptureSession.CaptureCallback callback, RequestType type) {
 
         if (mCaptureSession == null) {
             return;
         }
 
-        switch (type) {
-            case REPEATING_REQUEST:
-                mCaptureSession.setRepeatingRequest(request, callback, mCameraHandler);
-                break;
-            case CAPTURE:
-                mCaptureSession.capture(request, callback, mCameraHandler);
-                break;
-            default:
-                break;
+        try {
+            switch (type) {
+                case REPEATING_REQUEST:
+                    mCaptureSession.setRepeatingRequest(request, callback, mCameraHandler);
+                    break;
+                case CAPTURE:
+                    mCaptureSession.capture(request, callback, mCameraHandler);
+                    break;
+                default:
+                    break;
+            }
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
         }
+
     }
 
     public void sendRequest(List<CaptureRequest> request,

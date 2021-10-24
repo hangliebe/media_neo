@@ -1,23 +1,41 @@
-package com.hangliebe.meidaneo;
+package com.hangliebe.medianeo;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.hangliebe.medianeocat.CameraNeo;
+import com.hangliebe.medianeo.rtmp.RtmpActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private Button btnRtmp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initialControl();
+    }
+
+    private void initialControl() {
+        btnRtmp = findViewById(R.id.btn_rtmp);
+        btnRtmp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RtmpActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private boolean checkPublishPermission() {
