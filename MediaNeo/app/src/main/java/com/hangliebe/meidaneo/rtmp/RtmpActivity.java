@@ -34,7 +34,7 @@ public class RtmpActivity extends AppCompatActivity {
     private final static String TAG = "RtmpActivity";
     private final static int HEIGHT = 1920;
     private final static int WIDTH = 1080;
-    private static int KEY_BIT_RATE = 2500000;
+    private static int KEY_BIT_RATE = 1600000;
 
     private Button btnConfigCodec;
     private Button btnCatchCamera;
@@ -43,6 +43,10 @@ public class RtmpActivity extends AppCompatActivity {
     private MediaCodec mMediaCodec;
     private Surface mCodecInputSurface;
     private CameraNeo mCameraNeo;
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,4 +161,6 @@ public class RtmpActivity extends AppCompatActivity {
             mCameraNeo.release();
         }
     }
+
+    public native String stringFromJNI();
 }

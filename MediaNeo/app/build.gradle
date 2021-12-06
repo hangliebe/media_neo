@@ -25,6 +25,12 @@ android {
             dirs 'libs/libs/aar'
         }
     }
+    externalNativeBuild {
+        cmake {
+            path file('CMakeLists.txt')
+            version '3.10.2'
+        }
+    }
 }
 
 dependencies {

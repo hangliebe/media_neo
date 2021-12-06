@@ -5,7 +5,7 @@
 
 #### 配置Live Template
 
-    // create CameraNeo object in OnCreate
+    // create CameraNeo object in OnCreate function
     CameraNeo mCameraNeo = new CameraNeo(this);
     private void neoCamera(String id) {
         // 1 open camera
