@@ -2,7 +2,10 @@ package com.hangliebe.medianeo.rtmp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraDevice;
@@ -10,7 +13,9 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.OutputConfiguration;
 import android.media.Image;
 import android.media.ImageReader;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
@@ -23,6 +28,7 @@ import com.hangliebe.medianeo.tool.ImageTransformer;
 import com.hangliebe.medianeocat.CameraNeo;
 import com.hangliebe.medianeocat.NeoCallback;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,14 +48,35 @@ public class LiveBroadcastActivity extends AppCompatActivity {
     int encodeCount;
     long previewTime;
     long encodeTime;
-
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    //请求状态码
+    private static int REQUEST_PERMISSION_CODE = 1;
 
     private CameraNeo mCameraNeo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_broadcast);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_PERMISSION_CODE);
+            }
+        }
+
         initialize();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSION_CODE) {
+            for (int i = 0; i < permissions.length; i++) {
+                Log.i("MainActivity", "申请的权限为：" + permissions[i] + ",申请结果：" + grantResults[i]);
+            }
+        }
     }
 
     private void initialize() {
@@ -67,8 +94,10 @@ public class LiveBroadcastActivity extends AppCompatActivity {
         // start thread
         thread.start();
         handler = new Handler(thread.getLooper());
-
-        FFmpegHandle.getInstance().initVideo("rtmp://81.68.165.138:1935/hangrtmp");
+        String filesDir = getFilesDir().toString();
+        FFmpegHandle.getInstance().initVideo(filesDir);
+        Log.d(TAG, "path:" + filesDir);
+        // FFmpegHandle.getInstance().initVideo("rtmp://81.68.165.138:1935/hangrtmp");
 
         mImageReader = ImageReader.newInstance(WIDTH, HEIGHT, ImageFormat.YUV_420_888, 1);
         mImageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {

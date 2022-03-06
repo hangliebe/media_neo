@@ -37,6 +37,8 @@ Java_com_hangliebe_medianeo_rtmp_FFmpegHandle_initVideo(JNIEnv *env, jobject ins
     LOGD("out_path:%s",out_path);
     LOGD("width:%d",width);
     LOGD("height:%d",height);
+    LOGD("avformat_version:%d",avformat_version());
+
     //计算yuv数据的长度
     yuv_width = width;
     yuv_height = height;

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.hangliebe.medianeo.case_opengles.OpenGLActivity;
 import com.hangliebe.medianeo.rtmp.LiveBroadcastActivity;
 import com.hangliebe.medianeo.rtmp.RtmpActivity;
 import com.hangliebe.medianeo.previewTest.PreviewActivity;
@@ -21,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     private Button btnRtmp;
     private Button btnPreview;
     private Button btnLiveBroadcast;
+    private Button btnOpenGL;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, LiveBroadcastActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnOpenGL = findViewById(R.id.btn_live_opengles);
+        btnOpenGL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, OpenGLActivity.class);
                 startActivity(intent);
             }
         });
