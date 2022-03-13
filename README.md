@@ -1,9 +1,12 @@
 # media_neo
 
-#### 介绍
+## 介绍
+
 media_neo是我开发的一个用于多媒体项目软件demo实现的工程，里面包含了一些音视频和相机的常见功能的代码实现。
 
-#### 配置Live Template
+## 配置Live Template
+
+### CameraNeo配置
 
     // create CameraNeo object in OnCreate function
     CameraNeo mCameraNeo = new CameraNeo(this);
