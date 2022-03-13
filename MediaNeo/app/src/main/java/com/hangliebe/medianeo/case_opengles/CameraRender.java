@@ -120,8 +120,10 @@ public class CameraRender implements GLSurfaceView.Renderer {
         uTextureMatrixLocation = GLES20.glGetUniformLocation(mShaderProgramId, "uTextureMatrix");
         uTextureSamplerLocation = GLES20.glGetUniformLocation(mShaderProgramId, "uTextureSampler");
 
+        // active and bind external oes texture
         GLES20.glActiveTexture(GL_TEXTURE_EXTERNAL_OES);
         GLES20.glBindTexture(GL_TEXTURE_EXTERNAL_OES, mOESTextureId);
+
         GLES20.glUniform1i(uTextureSamplerLocation, 0);
         GLES20.glUniformMatrix4fv(uTextureMatrixLocation, 1, false, mTransformMatrix, 0);
 
